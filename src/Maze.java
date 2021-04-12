@@ -14,14 +14,6 @@ public class Maze {
 
     public Maze() {
         this(fraction);
-        for (int i = 0; i < Rows; i++) {
-            for (int j = 0; j < Columns; j++) {
-                if (Math.random() < fraction) A[i][j] = OBSTACLE;
-                else A[i][j] = WALKABLE;
-            }
-        }
-        setState(INITIAL_STATE);
-        setState(GOAL_STATE);
     }
 
     public Maze(double newFraction) {
@@ -45,10 +37,6 @@ public class Maze {
             column = (int) (Math.random() * Columns);
         } while (A[row][column] != WALKABLE);
         A[row][column] = newState;
-    }
-
-    private void notFound() {
-        System.out.println("Lectura de elementos de la matriz: ");
     }
 
     public void printMaze() {
