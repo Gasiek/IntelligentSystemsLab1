@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+/*import java.util.ArrayList;
 import java.util.List;
 
 public class Logic {
@@ -43,8 +43,6 @@ public class Logic {
         return calcGcost(n)+calcHcost(n) ;
     }
 
-    public static void main(String[] args) {
-        //TODO here we write the A* algorithm
 
-    }
 }
+*/

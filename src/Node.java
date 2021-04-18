@@ -14,18 +14,18 @@ public class Node {
         this.y = girdY ;
         this.nodeState=state ;
     }
-    public void addNeighbours(){
+    public void addNeighbours(Node[][] A){
         if (x < Maze.Rows - 1) {
-            this.neighbors.add(Logic.Maze_Node[x + 1][y]);
+            this.neighbors.add(A[x + 1][y]);
         }
         if (x > 0) {
-            this.neighbors.add(Logic.Maze_Node[x - 1][y]);
+            this.neighbors.add(A[x - 1][y]);
         }
         if (y < Maze.Columns - 1) {
-            this.neighbors.add(Logic.Maze_Node[x][y + 1]);
+            this.neighbors.add(A[x][y + 1]);
         }
         if (y > 0) {
-            this.neighbors.add(Logic.Maze_Node[x][y - 1]);
+            this.neighbors.add(A[x][y - 1]);
         }
     }
 
@@ -51,5 +51,7 @@ public class Node {
 
     public int getY() { return y; }
 
+    public char getNodeState() { return nodeState; }
 
+    public void setNodeState(char nodeState) { this.nodeState = nodeState; }
 }
