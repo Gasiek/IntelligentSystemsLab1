@@ -1,7 +1,6 @@
-
 public class Maze {
-    public int Rows = 60;
-    public int Columns = 80;
+    public static int Rows = 60;
+    public static int Columns = 80;
     char[][] A = new char[Rows][Columns];
     public final char OBSTACLE = '*';
     public final char INITIAL_STATE = 'I';
@@ -46,5 +45,8 @@ public class Maze {
             }
             System.out.print("\n");
         }
+    }
+    public char getChar(int x , int y){
+        return A[x][y] ;
     }
 }
