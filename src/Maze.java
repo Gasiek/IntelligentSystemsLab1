@@ -1,8 +1,8 @@
+
 public class Maze {
     public static int Rows = 60;
     public static int Columns = 80;
-    Node[][] A = new Node[Rows][Columns];
-
+    char[][] A = new char[Rows][Columns];
     public final char OBSTACLE = '*';
     public final char INITIAL_STATE = 'I';
     public final char GOAL_STATE = 'G';
@@ -11,10 +11,6 @@ public class Maze {
     public static double fraction = 0.3;
     public int row;
     public int column;
-    private Node start; //where is the INITIAL_STATE
-    private Node end;   //where is the GOAL_STATE
-
-
 
     public Maze() {
         this(fraction);
@@ -27,8 +23,8 @@ public class Maze {
         }
         for (int i = 0; i < Rows; i++) {
             for (int j = 0; j < Columns; j++) {
-                if (Math.random() < newFraction) A[i][j] = new Node(i,j,OBSTACLE) ;//A[i][j] = OBSTACLE;
-                else A[i][j] = new Node (i,j,WALKABLE);
+                if (Math.random() < newFraction) A[i][j] = OBSTACLE;
+                else A[i][j] = WALKABLE;
             }
         }
         setState(INITIAL_STATE);
@@ -39,37 +35,16 @@ public class Maze {
         do {
             row = (int) (Math.random() * Rows);
             column = (int) (Math.random() * Columns);
-        } while (A[row][column].getNodeState() != WALKABLE);
-        A[row][column] = new Node (row , column ,newState);
-        if(newState==INITIAL_STATE) start = A[row][column] ; //locating the starting point
-        else end = A[row][column] ;  //locating the ending point
+        } while (A[row][column] != WALKABLE);
+        A[row][column] = newState;
     }
-
 
     public void printMaze() {
         for (int i = 0; i < Rows; i++) {
             for (int j = 0; j < Columns; j++) {
-                System.out.print(A[i][j].getNodeState() + " ");
+                System.out.print(A[i][j] + " ");
             }
             System.out.print("\n");
         }
     }
-    public double calcGcost(Node n){
-        return Math.sqrt(Math.pow((n.getX() - start.getX()), 2) + Math.pow((n.getY() - start.getY()), 2));
-        // im not sure about this one
-    }
-    public double calcHcost(Node n){
-        return Math.sqrt(Math.pow((n.getX() - end.getX()), 2) + Math.pow((n.getY() - end.getY()), 2));
-    }
-    public double calcFcost(Node n){
-        return calcGcost(n)+calcHcost(n) ;
-    }
-
-    public static void main(String[] args) {
-        //TODO here we write the A* algorithm
-        Maze m = new Maze() ;
-        m.printMaze();
-        System.out.println(m.calcHcost(m.start));
-    }
-
 }
