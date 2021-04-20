@@ -20,16 +20,16 @@ public class Node {
 
     public void addNeighbors(Node[][] A) {
         if (x < Maze.Rows - 1) {
-            this.neighbors.add(A[x + 1][y]);
+            if (A[x + 1][y].nodeState == ' ') this.neighbors.add(A[x + 1][y]);
         }
         if (x > 0) {
-            this.neighbors.add(A[x - 1][y]);
+            if (A[x - 1][y].nodeState == ' ') this.neighbors.add(A[x - 1][y]);
         }
         if (y < Maze.Columns - 1) {
-            this.neighbors.add(A[x][y + 1]);
+            if (A[x][y + 1].nodeState == ' ') this.neighbors.add(A[x][y + 1]);
         }
         if (y > 0) {
-            this.neighbors.add(A[x][y - 1]);
+            if (A[x][y - 1].nodeState == ' ') this.neighbors.add(A[x][y - 1]);
         }
     }
 

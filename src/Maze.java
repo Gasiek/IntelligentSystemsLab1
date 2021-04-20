@@ -38,7 +38,7 @@ public class Maze {
 
     public static void main(String[] args) {
         //TODO here we write the A* algorithm
-        Maze m = new Maze();
+        Maze m = new Maze(0.1);
         m.printMaze();
         System.out.println(m.calcHcost(m.start));
         List<Node> path = new ArrayList<>();
