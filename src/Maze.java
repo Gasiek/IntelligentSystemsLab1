@@ -1,8 +1,8 @@
 import java.util.*;
 
 public class Maze {
-    public static int Rows = 60;
-    public static int Columns = 80;
+    public static int Rows = 30;
+    public static int Columns = 40;
     Node[][] A = new Node[Rows][Columns];
 
     public final char OBSTACLE = '*';
@@ -38,8 +38,7 @@ public class Maze {
 
     public static void main(String[] args) {
         //TODO here we write the A* algorithm
-        Maze m = new Maze(0.1);
-        m.printMaze();
+        Maze m = new Maze(0.3);
         System.out.println(m.calcHcost(m.start));
         List<Node> path = new ArrayList<>();
 
@@ -49,6 +48,7 @@ public class Maze {
         for (Node node : path) {
             System.out.println(node.getX() + ", " + node.getY());
         }
+        m.printMaze();
     }
 
     public void printMaze() {
@@ -60,18 +60,9 @@ public class Maze {
         }
     }
 
-//    public double calcGcost(Node n) {
-//        return Math.sqrt(Math.pow((n.getX() - start.getX()), 2) + Math.pow((n.getY() - start.getY()), 2));
-//        // im not sure about this one
-//    }
-
     public double calcHcost(Node n) {
         return Math.sqrt(Math.pow((n.getX() - end.getX()), 2) + Math.pow((n.getY() - end.getY()), 2));
     }
-
-//    public double calcFcost(Node n) {
-//        return calcGcost(n) + calcHcost(n);
-//    }
 
     private void setState(char newState) {
         do {
@@ -101,7 +92,9 @@ public class Maze {
                 path.add(current);
                 while (parent.get(current) != null) {
                     current = parent.get(current);
+                    if (current.getNodeState() != 'G' && current.getNodeState() != 'I') current.setNodeState('+');
                     path.add(current);
+
                 }
                 return path;
             }
