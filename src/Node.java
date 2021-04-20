@@ -1,20 +1,24 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Node {
-    private int x,y ;
-    private double gCost , hCost ,fCost;
-    private char nodeState ; //here we define which state are we
-    private List<Node> neighbors = new ArrayList<>() ;
-    private Node parent ;
-    private Boolean path = false ;
+import static java.lang.Float.MAX_VALUE;
 
-        public Node(int girdX , int girdY , char state ){
-        this.x = girdX ;
-        this.y = girdY ;
-        this.nodeState=state ;
+public class Node {
+    private int x, y;
+    private double hCost, fCost;
+    private double gCost = MAX_VALUE;
+    private char nodeState; //here we define which state are we
+    private List<Node> neighbors = new ArrayList<>();
+    private Node parent;
+    private Boolean path = false;
+
+    public Node(int girdX, int girdY, char state) {
+        this.x = girdX;
+        this.y = girdY;
+        this.nodeState = state;
     }
-    public void addNeighbours(Node[][] A){
+
+    public void addNeighbors(Node[][] A) {
         if (x < Maze.Rows - 1) {
             this.neighbors.add(A[x + 1][y]);
         }
@@ -45,13 +49,27 @@ public class Node {
         this.hCost = hCost;
     }
 
-    public void setfCost(double fCost ){ this.fCost = fCost; }
+    public void setfCost(double fCost) {
+        this.fCost = fCost;
+    }
 
-    public int getX() { return x; }
+    public int getX() {
+        return x;
+    }
 
-    public int getY() { return y; }
+    public int getY() {
+        return y;
+    }
 
-    public char getNodeState() { return nodeState; }
+    public char getNodeState() {
+        return nodeState;
+    }
 
-    public void setNodeState(char nodeState) { this.nodeState = nodeState; }
+    public void setNodeState(char nodeState) {
+        this.nodeState = nodeState;
+    }
+
+    public List<Node> getNeighbors() {
+        return neighbors;
+    }
 }

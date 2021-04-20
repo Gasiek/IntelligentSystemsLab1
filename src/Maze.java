@@ -1,3 +1,5 @@
+import java.util.*;
+
 public class Maze {
     public static int Rows = 60;
     public static int Columns = 80;
@@ -39,16 +41,14 @@ public class Maze {
         Maze m = new Maze();
         m.printMaze();
         System.out.println(m.calcHcost(m.start));
-    }
+        List<Node> path = new ArrayList<>();
 
-    private void setState(char newState) {
-        do {
-            row = (int) (Math.random() * Rows);
-            column = (int) (Math.random() * Columns);
-        } while (A[row][column].getNodeState() != WALKABLE);
-        A[row][column] = new Node(row, column, newState);
-        if (newState == INITIAL_STATE) start = A[row][column]; //locating the starting point
-        else end = A[row][column];  //locating the ending point
+        if (m.calcHcost(m.start) != 0) {
+            path = m.aStarAlgorithm();
+        }
+        for (Node node : path) {
+            System.out.println(node.getX() + ", " + node.getY());
+        }
     }
 
     public void printMaze() {
@@ -60,17 +60,67 @@ public class Maze {
         }
     }
 
-    public double calcGcost(Node n) {
-        return Math.sqrt(Math.pow((n.getX() - start.getX()), 2) + Math.pow((n.getY() - start.getY()), 2));
-        // im not sure about this one
-    }
+//    public double calcGcost(Node n) {
+//        return Math.sqrt(Math.pow((n.getX() - start.getX()), 2) + Math.pow((n.getY() - start.getY()), 2));
+//        // im not sure about this one
+//    }
 
     public double calcHcost(Node n) {
         return Math.sqrt(Math.pow((n.getX() - end.getX()), 2) + Math.pow((n.getY() - end.getY()), 2));
     }
 
-    public double calcFcost(Node n) {
-        return calcGcost(n) + calcHcost(n);
+//    public double calcFcost(Node n) {
+//        return calcGcost(n) + calcHcost(n);
+//    }
+
+    private void setState(char newState) {
+        do {
+            row = (int) (Math.random() * Rows);
+            column = (int) (Math.random() * Columns);
+        } while (A[row][column].getNodeState() != WALKABLE);
+        A[row][column] = new Node(row, column, newState);
+        System.out.println(row + ", " + column);
+        if (newState == INITIAL_STATE) start = A[row][column]; //locating the starting point
+        else end = A[row][column];  //locating the ending point
     }
 
+    public List<Node> aStarAlgorithm() {
+        List<Node> closedSet = new ArrayList<>();
+        List<Node> openSet = new ArrayList<>(List.of(start));
+        HashMap<Node, Node> parent = new HashMap<Node, Node>();
+        Node current;
+        double tentative_g;
+        List<Node> path = new ArrayList<>();
+
+        start.setgCost(0);
+
+        while (!openSet.isEmpty()) {
+            current = Collections.min(openSet, Comparator.comparing(Node::gethCost));//chooses a node with minimal f_cost
+            current.addNeighbors(A);
+            if (current.getNodeState() == GOAL_STATE) {
+                path.add(current);
+                while (parent.get(current) != null) {
+                    current = parent.get(current);
+                    path.add(current);
+                }
+                return path;
+            }
+            openSet.remove(current);
+            closedSet.add(current);
+            for (Node neighbor : current.getNeighbors()) {
+                if (closedSet.contains(neighbor)) continue;
+                tentative_g = current.getgCost() + 1;//tentative_g := g[current] + dist_between(current,neighbor)
+                if (!closedSet.contains(neighbor) || tentative_g < neighbor.getgCost()) {
+                    parent.put(neighbor, current);
+                    neighbor.setgCost(tentative_g);
+                    neighbor.sethCost(calcHcost(neighbor));
+                    neighbor.setfCost(neighbor.getgCost() + neighbor.gethCost());
+                    if (!openSet.contains(neighbor)) {
+                        openSet.add(neighbor);
+                    }
+                }
+            }
+        }
+        return path;
+    }
 }
