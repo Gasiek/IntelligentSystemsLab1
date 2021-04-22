@@ -47,6 +47,10 @@ public class Node {
         return hCost;
     }
 
+    public double getfCost() {
+        return fCost;
+    }
+
     public void sethCost(double hCost) {
         this.hCost = hCost;
     }

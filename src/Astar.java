@@ -26,9 +26,8 @@ public class Astar {
 	}
 
 	public List<Node> aStarAlgorithm() {
-
 		while (!openSet.isEmpty()) {
-			current = Collections.min(openSet, Comparator.comparing(Node::gethCost));//chooses a node with minimal f_cost
+			current = Collections.min(openSet, Comparator.comparing(Node::getfCost));//chooses a node with minimal f_cost
 			current.addNeighbors(maze.getMazeMatrix()); //Modified
 
 			if (current.getNodeState() == maze.getGoalState()) { //Modified

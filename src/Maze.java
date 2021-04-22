@@ -1,7 +1,7 @@
 public class Maze {
 
-    private static final int ROWS = 6;
-    private static final int COLUMNS = 8;
+    private static final int ROWS = 60;
+    private static final int COLUMNS = 80;
     private static double fraction = 0.3;
     private final char OBSTACLE = '*';
     private final char INITIAL_STATE = 'I';
@@ -31,6 +31,7 @@ public class Maze {
         }
         setState(INITIAL_STATE);
         setState(GOAL_STATE);
+        startingNode.setgCost(0);                                                                                 //set g cost of I to 0
     }
 
     public static int getROWS() {
@@ -81,7 +82,6 @@ public class Maze {
             column = (int) (Math.random() * COLUMNS);
         } while (maze[row][column].getNodeState() != WALKABLE);
         maze[row][column] = new Node(row, column, newState);
-        System.out.println(row + ", " + column);
         if (newState == INITIAL_STATE) startingNode = maze[row][column]; //locating the starting point
         else goalNode = maze[row][column];  //locating the ending point
     }
