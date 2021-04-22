@@ -1,21 +1,17 @@
-import java.util.*;
-
 public class Maze {
-    public static int Rows = 30;
-    public static int Columns = 40;
-    Node[][] A = new Node[Rows][Columns];
 
-    public final char OBSTACLE = '*';
-    public final char INITIAL_STATE = 'I';
-    public final char GOAL_STATE = 'G';
-    public final char BELONG = '+';
-    public final char WALKABLE = ' ';
-    public static double fraction = 0.3;
-    public int row;
-    public int column;
-    private Node start; //where is the INITIAL_STATE
-    private Node end;   //where is the GOAL_STATE
-
+    private static final int ROWS = 6;
+    private static final int COLUMNS = 8;
+    private static double fraction = 0.3;
+    private final char OBSTACLE = '*';
+    private final char INITIAL_STATE = 'I';
+    private final char GOAL_STATE = 'G';
+    private final char WALKABLE = ' ';
+    Node[][] maze = new Node[ROWS][COLUMNS];
+    private int row;
+    private int column;
+    private Node startingNode; //Where the initial state is
+    private Node goalNode;   //where the goal state is
 
     public Maze() {
         this(fraction);
@@ -23,97 +19,70 @@ public class Maze {
 
     public Maze(double newFraction) {
         if (newFraction > 0.9 || newFraction < 0) {
-            System.out.println("The fraction has to be a value between 0 and 0.9. It has been changed to default value: " + fraction);
+            System.out.println("The fraction has to be a value between 0 and 0.9. "
+                    + "It has been changed to default value: " + fraction);
             newFraction = fraction;
         }
-        for (int i = 0; i < Rows; i++) {
-            for (int j = 0; j < Columns; j++) {
-                if (Math.random() < newFraction) A[i][j] = new Node(i, j, OBSTACLE);//A[i][j] = OBSTACLE;
-                else A[i][j] = new Node(i, j, WALKABLE);
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLUMNS; j++) {
+                if (Math.random() < newFraction) maze[i][j] = new Node(i, j, OBSTACLE);//maze[i][j] = OBSTACLE;
+                else maze[i][j] = new Node(i, j, WALKABLE);
             }
         }
         setState(INITIAL_STATE);
         setState(GOAL_STATE);
     }
 
-    public static void main(String[] args) {
-        //TODO here we write the A* algorithm
-        Maze m = new Maze(0.3);
-        System.out.println(m.calcHcost(m.start));
-        List<Node> path = new ArrayList<>();
+    public static int getROWS() {
+        return ROWS;
+    }
 
-        if (m.calcHcost(m.start) != 0) {
-            path = m.aStarAlgorithm();
-        }
-        for (Node node : path) {
-            System.out.println(node.getX() + ", " + node.getY());
-        }
-        m.printMaze();
+    public static int getCOLUMNS() {
+        return COLUMNS;
+    }
+
+    public static double getFraction() {
+        return fraction;
+    }
+
+    public Node[][] getMazeMatrix() {
+        return maze;
+    }
+
+    public char getGoalState() {
+        return GOAL_STATE;
+    }
+
+    public Node getStartingNode() {
+        return startingNode;
+    }
+
+    public Node getGoalNode() {
+        return goalNode;
     }
 
     public void printMaze() {
-        for (int i = 0; i < Rows; i++) {
-            for (int j = 0; j < Columns; j++) {
-                System.out.print(A[i][j].getNodeState() + " ");
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLUMNS; j++) {
+                System.out.print(maze[i][j].getNodeState() + " ");
             }
             System.out.print("\n");
         }
     }
 
+    //Manhattan distance
     public double calcHcost(Node n) {
-        return Math.sqrt(Math.pow((n.getX() - end.getX()), 2) + Math.pow((n.getY() - end.getY()), 2));
+        return Math.abs(goalNode.getX() - n.getX()) + Math.abs(goalNode.getY() - n.getY());
     }
 
     private void setState(char newState) {
         do {
-            row = (int) (Math.random() * Rows);
-            column = (int) (Math.random() * Columns);
-        } while (A[row][column].getNodeState() != WALKABLE);
-        A[row][column] = new Node(row, column, newState);
+            row = (int) (Math.random() * ROWS);
+            column = (int) (Math.random() * COLUMNS);
+        } while (maze[row][column].getNodeState() != WALKABLE);
+        maze[row][column] = new Node(row, column, newState);
         System.out.println(row + ", " + column);
-        if (newState == INITIAL_STATE) start = A[row][column]; //locating the starting point
-        else end = A[row][column];  //locating the ending point
-    }
-
-    public List<Node> aStarAlgorithm() {
-        List<Node> closedSet = new ArrayList<>();
-        List<Node> openSet = new ArrayList<>(List.of(start));
-        HashMap<Node, Node> parent = new HashMap<Node, Node>();
-        Node current;
-        double tentative_g;
-        List<Node> path = new ArrayList<>();
-
-        start.setgCost(0);
-
-        while (!openSet.isEmpty()) {
-            current = Collections.min(openSet, Comparator.comparing(Node::gethCost));//chooses a node with minimal f_cost
-            current.addNeighbors(A);
-            if (current.getNodeState() == GOAL_STATE) {
-                path.add(current);
-                while (parent.get(current) != null) {
-                    current = parent.get(current);
-                    if (current.getNodeState() != 'G' && current.getNodeState() != 'I') current.setNodeState('+');
-                    path.add(current);
-
-                }
-                return path;
-            }
-            openSet.remove(current);
-            closedSet.add(current);
-            for (Node neighbor : current.getNeighbors()) {
-                if (closedSet.contains(neighbor)) continue;
-                tentative_g = current.getgCost() + 1;//tentative_g := g[current] + dist_between(current,neighbor)
-                if (!closedSet.contains(neighbor) || tentative_g < neighbor.getgCost()) {
-                    parent.put(neighbor, current);
-                    neighbor.setgCost(tentative_g);
-                    neighbor.sethCost(calcHcost(neighbor));
-                    neighbor.setfCost(neighbor.getgCost() + neighbor.gethCost());
-                    if (!openSet.contains(neighbor)) {
-                        openSet.add(neighbor);
-                    }
-                }
-            }
-        }
-        return path;
+        if (newState == INITIAL_STATE) startingNode = maze[row][column]; //locating the starting point
+        else goalNode = maze[row][column];  //locating the ending point
     }
 }

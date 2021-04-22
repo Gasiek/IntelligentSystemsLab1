@@ -9,8 +9,6 @@ public class Node {
     private double gCost = MAX_VALUE; //biggest float
     private char nodeState; //here we define which state are we
     private List<Node> neighbors = new ArrayList<>();
-    private Node parent;
-    private Boolean path = false;
 
     public Node(int girdX, int girdY, char state) {
         this.x = girdX;
@@ -19,17 +17,21 @@ public class Node {
     }
 
     public void addNeighbors(Node[][] A) {
-        if (x < Maze.Rows - 1) {
-            if (A[x + 1][y].nodeState == ' ' || A[x + 1][y].nodeState == 'G') this.neighbors.add(A[x + 1][y]);
+        if (x < Maze.getROWS() - 1) {
+            if (A[x + 1][y].nodeState == ' ' || A[x + 1][y].nodeState == 'G')
+                this.neighbors.add(A[x + 1][y]);
         }
         if (x > 0) {
-            if (A[x - 1][y].nodeState == ' ' || A[x - 1][y].nodeState == 'G') this.neighbors.add(A[x - 1][y]);
+            if (A[x - 1][y].nodeState == ' ' || A[x - 1][y].nodeState == 'G')
+                this.neighbors.add(A[x - 1][y]);
         }
-        if (y < Maze.Columns - 1) {
-            if (A[x][y + 1].nodeState == ' ' || A[x][y + 1].nodeState == 'G') this.neighbors.add(A[x][y + 1]);
+        if (y < Maze.getCOLUMNS() - 1) {
+            if (A[x][y + 1].nodeState == ' ' || A[x][y + 1].nodeState == 'G')
+                this.neighbors.add(A[x][y + 1]);
         }
         if (y > 0) {
-            if (A[x][y - 1].nodeState == ' ' || A[x][y - 1].nodeState == 'G') this.neighbors.add(A[x][y - 1]);
+            if (A[x][y - 1].nodeState == ' ' || A[x][y - 1].nodeState == 'G')
+                this.neighbors.add(A[x][y - 1]);
         }
     }
 
