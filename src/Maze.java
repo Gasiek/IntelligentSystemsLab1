@@ -12,13 +12,14 @@ public class Maze {
     private int column;
     private Node startingNode; //Where the initial state is
     private Node goalNode;   //where the goal state is
+    public static Boolean Test_Mode = true ; //True performs individual test || false for group tests (optional task )
 
     public Maze() {
         this(fraction);
     }
 
     public Maze(double newFraction) {
-        if (newFraction > 0.9 || newFraction < 0) {
+        if ((newFraction > 0.9 || newFraction < 0)) {
             System.out.println("The fraction has to be a value between 0 and 0.9. "
                     + "It has been changed to default value: " + fraction);
             newFraction = fraction;
@@ -77,12 +78,21 @@ public class Maze {
     }
 
     private void setState(char newState) {
-        do {
+        if(Test_Mode){ // individual test
+            do {
+                row = (int) (Math.random() * ROWS);
+                column = (int) (Math.random() * COLUMNS);
+         } while (maze[row][column].getNodeState() != WALKABLE);
+             maze[row][column] = new Node(row, column, newState);
+             if (newState == INITIAL_STATE) startingNode = maze[row][column]; //locating the starting point
+             else goalNode = maze[row][column];  //locating the ending point
+
+        }else{
             row = (int) (Math.random() * ROWS);
             column = (int) (Math.random() * COLUMNS);
-        } while (maze[row][column].getNodeState() != WALKABLE);
-        maze[row][column] = new Node(row, column, newState);
-        if (newState == INITIAL_STATE) startingNode = maze[row][column]; //locating the starting point
-        else goalNode = maze[row][column];  //locating the ending point
+            maze[row][column] = new Node(row, column, newState);
+            if (newState == INITIAL_STATE) startingNode = maze[row][column]; //locating the starting point
+            else goalNode = maze[row][column];  //locating the ending point
+        }
     }
 }
